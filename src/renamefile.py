@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from pytz import timezone
 import os
+import re
 import sys
 import logging
 
@@ -55,12 +56,3 @@ class RenameFile:
 				logger.info('No file matching regular expression')
 		os.rename(PATH + filename, PATH + new_filename)
 		return
-
-
-if '__name__' == __main__:
-	rename_file = RenameFile()
-	PATH = '/home/lund/Downloads'
-	new_filename = 'Test.csv'
-	rename_file.rename_file(new_filename, PATH)
-
-	
