@@ -44,35 +44,23 @@ class RenameFile:
 		logger.debug('Adjusted Timezone is %s' % str(datetime))
 		return datetime
 
-	def rename_file(self, datetime, new_filename, PATH):
-		'''takes given datetime and uses it to create a string that
-		matches the filename of recently downloaded ekos export. Then
-		searches PATH directory for the desired file and renames file
-		to new filename provided by user '''
-		filename = 'Export_%s_.csv' % datetime.strftime("%m%d%Y%I%M%S")
-		count = 0
-		exit = False
-		try:
-			while os.path.isfile(PATH + filename) is False and exit is False:
-				try:
-					datetime = datetime.replace(second = datetime.second + 1)
-					count = count + 1
-					logger.debug(datetime)
-					filename = 'Export_%s_.csv' % datetime.strftime("%m%d%Y%I%M%S")
-					logger.debug(filename)
-					if count == 59:
-						exit = True
-				except ValueError:
-					logger.warning('ValueError: resetting seconds to 0. count = %d' % count)
-					datetime = datetime.replace(second = 0)
-					count = 0
-			if exit == True:
-				sys.exit()	#  Acts as failsafe against infinite loop
-		except SystemExit:
-			logger.exception('Exiting program due to infinite loop')
-
+	def rename_file(self, new_filename, PATH):
+		'''Searches for the downloaded csv file based on a regular expression
+		and replaces that filename with a filename provided '''
+		filename_regex = re.compile('Export_\d\d\d\d\d\d\d\d\d\d\d\d\d\d_\.csv')
+		for l in os.listdir(PATH):
+			if filename_regex.match(l) != None:
+				filename = filename_regex.match(l).string
+			else:
+				logger.info('No file matching regular expression')
 		os.rename(PATH + filename, PATH + new_filename)
 		return
 
+
+if '__name__' == __main__:
+	rename_file = RenameFile()
+	PATH = '/home/lund/Downloads'
+	new_filename = 'Test.csv'
+	rename_file.rename_file(new_filename, PATH)
 
 	
