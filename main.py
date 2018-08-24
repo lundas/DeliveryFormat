@@ -67,15 +67,11 @@ try:
 
 	# download and rename first report
 	r1Time = ekos.download_report(report1)
-	r1Time = rename.dtround(r1Time)
-	r1Time = rename.tzconv(r1Time)
-	rename.rename_file(r1Time, report1+'.csv', PATH)
+	rename.rename_file(report1+'.csv', PATH)
 
 	# download and rename second report
 	r2Time = ekos.download_report(report2)
-	r2Time = rename.dtround(r2Time)
-	r2Time = rename.tzconv(r2Time)
-	rename.rename_file(r2Time, report2+'.csv', PATH)
+	rename.rename_file(report2+'.csv', PATH)
 
 	ekos.quit()
 
