@@ -90,5 +90,7 @@ except SystemExit:
 	logger.exception('Program was exited due to no deliveries tomorrow')
 	message = 'Tomorrow is not a delivery day. No files attached'
 	email.send_email(message, subject, emailTo, emailFrom, password)
+except:
+	ekos.quit()
 
 
