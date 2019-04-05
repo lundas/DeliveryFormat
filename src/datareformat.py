@@ -45,10 +45,10 @@ class DataReformat:
 		errors = []  # Collects errors to be included in email
 
 		for row in deliveryData[1:]:
-			if row[3]==0 or \
-			   row[4]==0 or \
-			   row[5]==0 or \
-			   row[6]==0:
+			if len(row[3])==0 or \
+			   len(row[4])==0 or \
+			   len(row[5])==0 or \
+			   len(row[6])==0:
 				addresses.append(row[3])
 				cities.append(row[4])
 				states.append(row[5])
@@ -77,7 +77,7 @@ class DataReformat:
 		deliveryFrom = []
 		deliveryTo = []
 		today = date.today()
-		deliveryWeekday = date.weekday(today)
+		deliveryWeekday = date.weekday(today)+1
 		for row in deliveryData[1:]:
 			if deliveryWeekday == 1:
 				if len(row[7]) > 0 and len(row[8]) > 0:
@@ -112,14 +112,19 @@ class DataReformat:
 					deliveryTo.append(datetime.strptime('03/13/1990 5:00 PM',"%m/%d/%Y %I:%M %p").time())
 					errors.append(row[2] + ' is missing a delivery time')
 
+		# Add Notes
+		notes = []
+		for row in deliveryData[1:]:
+			notes.append(row[15])
+
 		# Write code that catches incorrect AM/PM Ekos entries 
 		# for delivery times
 		for dA,dF,dT in zip(deliveryAccounts, deliveryFrom, deliveryTo):
 			if dF >= dT:
 				errors.append(dA + '\'s delivery hours are entered incorrectly')
 
-		deliveryHours = zip(deliveryAccounts, deliveryAddresses, deliveryFrom, deliveryTo)
-		deliveryHours.insert(0, ('ID', 'Address', 'From', 'To')) # insert column headers
+		deliveryHours = zip(deliveryAccounts, deliveryAddresses, deliveryFrom, deliveryTo, notes)
+		deliveryHours.insert(0, ('ID', 'Address', 'From', 'To', 'Notes')) # insert column headers
 
 		#write info to csv file
 		with open(PATH + filename, 'wb') as csvfile:
