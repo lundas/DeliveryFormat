@@ -36,6 +36,7 @@ sac = 'Delivery Hours - Sac'
 eb = 'Delivery Hours - East Bay'
 sb = 'Delivery Hours - South Bay'
 nb = 'Delivery Hours - North Bay'
+pick_list = 'Deliveries - Pick List by Item [Tomorrow]'
 today = date.today()
 dotw = date.weekday(today)	# Day of the Week for tomorrow - today in UTC
 # Send email
@@ -73,6 +74,10 @@ try:
 	r2Time = ekos.download_report(report2)
 	rename.rename_file(report2+'.csv', PATH)
 
+	# download and rename pick list
+	r3Time = ekos.download_report(pick_list)
+	rename.rename_file(pick_list+'.csv', PATH)
+
 	ekos.quit()
 
 	# reformat data and collect errors
@@ -81,6 +86,15 @@ try:
 	# join errors into string and append to message
 	errors = '\n'.join(errors)
 	message += errors
+
+	# get package counts from picklist
+	pack_counts = reformat.pick_list_counts(PATH, pick_list+'.csv')
+	message += '\n\n----------------------------------------------\n\n'
+	for i in pack_counts.keys():
+		message += '%s - 50Ls: %f, Sixtels: %f, Cans: %f \n' % 
+		(i, pack_counts[i][0], pack_counts[i][1], pack_counts[i][2])
+
+	# Attach files to send in email
 	fileToSend = [PATH+report1+'.csv', PATH+report2+'.csv']
 
 	# Send email

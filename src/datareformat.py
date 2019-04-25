@@ -134,6 +134,48 @@ class DataReformat:
 
 		return errors
 
+	def pick_list_count(self, PATH, filename):
+		# Counts kegs/cans in each format for tomorrow's delivery
+		# Returns dict with entries in format Disto Comp:[50L, Sixtel, Cans]
+
+		logger.info('Counting kegs')
+
+		# Import and read csv file located in PATH
+		targetFile = PATH + filename
+		pick_list = open(targetFile)
+		pl_reader = csv.reader(pick_list)
+		pl_data = list(pl_reader)
+
+		# Collect unique distro companies
+		distro_cos = []
+		for j in [i[0] for i in pick_list_data[2:]]:
+			if j not in distro_cos:
+				distro_cos.append[j]
+
+		# Blank dictionary to collect counts by distro comp
+		pack_counts = {}
+		# Iterate thru distro companies
+		for i in distro_cos:
+			# Define package variables
+			fifties = 0
+			sixtels = 0
+			cans = 0
+			# Iterate through pick list data
+			for j in pl_data:
+				if i in j[0] and '(keg - 13.2 gal)' in j[1].lower():
+					fifties += float(j[2]) #type conversion str to flt
+				elif i in j[0] and '(keg - sixtel)' in j[1].lower():
+					sixtels += float(j[2])
+				elif i in j[0] and ' - can)' in j[1].lower():
+					cans += float(j[2])
+
+			# Assign list of vars to dict with distro co as key
+			pack_counts[i] = [fifties, sixtels, cans]
+
+		return pack_counts
+
+
+
 
 if __name__ == '__main__':
 	reformat = DataReformat()
