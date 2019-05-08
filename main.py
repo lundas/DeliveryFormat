@@ -31,14 +31,12 @@ email = sendemail.SendEmail()
 eUsername = 'EKOS USERNAME'
 ePassword = 'EKOS PASSWORD'
 PATH = '/PATH/TO/FILES/'	# PATH on local machine
-sf = 'Delivery Hours - SF'
-sac = 'Delivery Hours - Sac'
-eb = 'Delivery Hours - East Bay'
-sb = 'Delivery Hours - South Bay'
-nb = 'Delivery Hours - North Bay'
-pick_list = 'Deliveries - Pick List by Item [Tomorrow]'
+tue = 'Distribution - Tuesday'
+wed = 'Distribution - Wednesday'
+thu = 'Distribution - Thursday'
+fri = 'Distribution - Friday'
 today = date.today()
-dotw = date.weekday(today)	# Day of the Week for tomorrow - today in UTC
+dotw = date.weekday(today)+1	# Day of the Week for tomorrow - today in UTC
 # Send email
 message = 'Here are the delivery hours for tomorrow\'s deliveries. Errors listed below:\n\n'
 subject = 'Delivery Hours %s' % str(today.replace(day=today.day))
@@ -50,52 +48,32 @@ password = 'EMAIL PASSWORD'
 # and sends email without attachments
 try:
 	if dotw == 1:	# Tuesday
-		report1 = sb
-		report2 = eb
+		report = tue
 	elif dotw == 2:	# Wednesday
-		report1 = sf
-		report2 = sac
+		report = wed
 	elif dotw == 3:	# Thursday
-		report1 = eb
-		report2 = nb
+		report = thu
 	elif dotw == 4:	# Friday
-		report1 = sb
-		report2 = sf
+		report = fri
 	else:
 		sys.exit()
 
 	ekos.login(eUsername, ePassword)
 
 	# download and rename first report
-	r1Time = ekos.download_report(report1)
-	rename.rename_file(report1+'.csv', PATH)
-
-	# download and rename second report
-	r2Time = ekos.download_report(report2)
-	rename.rename_file(report2+'.csv', PATH)
-
-	# download and rename pick list
-	r3Time = ekos.download_report(pick_list)
-	rename.rename_file(pick_list+'.csv', PATH)
+	r1Time = ekos.download_report(report)
+	rename.rename_file(report+'.csv', PATH)
 
 	ekos.quit()
 
 	# reformat data and collect errors
-	errors = reformat.data_reformat(PATH, report1+'.csv')
-	errors += reformat.data_reformat(PATH, report2+'.csv')
+	errors = reformat.data_reformat(PATH, report+'.csv')
 	# join errors into string and append to message
 	errors = '\n'.join(errors)
 	message += errors
 
-	# get package counts from picklist
-	pack_counts = reformat.pick_list_counts(PATH, pick_list+'.csv')
-	message += '\n\n----------------------------------------------\n\n'
-	for i in pack_counts.keys():
-		message += '%s - 50Ls: %f, Sixtels: %f, Cans: %f \n' % 
-		(i, pack_counts[i][0], pack_counts[i][1], pack_counts[i][2])
-
 	# Attach files to send in email
-	fileToSend = [PATH+report1+'.csv', PATH+report2+'.csv']
+	fileToSend = [PATH+report+'.csv']
 
 	# Send email
 	email.send_email(message, subject, emailTo, emailFrom, password, fileToSend)
