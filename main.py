@@ -6,6 +6,7 @@ from src import renamefile
 from src import datareformat
 from src import sendemail
 from datetime import date
+import yaml
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -27,10 +28,14 @@ reformat = datareformat.DataReformat()
 email = sendemail.SendEmail()
 
 # Define variables
+# Config
+conf_file ='./DeliveryFormat/config_EXAMPLE.yaml' #PATH to config file
+stream = file(conf_file, 'r')
+config = yaml.safe_load(stream)
 # Ekos
-eUsername = 'EKOS USERNAME'
-ePassword = 'EKOS PASSWORD'
-PATH = '/PATH/TO/FILES/'	# PATH on local machine
+eUsername = config['ekos_user']
+ePassword = config['ekos_pw']
+PATH = config['PATH']	
 tue = 'Distribution - Tuesday'
 wed = 'Distribution - Wednesday'
 thu = 'Distribution - Thursday'
@@ -40,9 +45,9 @@ dotw = date.weekday(today)+1	# Day of the Week for tomorrow - today in UTC
 # Send email
 message = 'Here are the delivery hours for tomorrow\'s deliveries. Errors listed below:\n\n'
 subject = 'Delivery Hours %s' % str(today.replace(day=today.day))
-emailTo = ['LIST OF EMAILS']
-emailFrom = 'EMAIL USERNAME'
-password = 'EMAIL PASSWORD'
+emailTo = config['email_list']
+emailFrom = config['email_user']
+password = config['email_pw']
 
 # Determines which reports to download based on dotw. If no delivery day appends message
 # and sends email without attachments
