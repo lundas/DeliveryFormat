@@ -68,7 +68,7 @@ try:
 			logger.debug('dealing with NaNs')
 			df['Delivery Start'] = df['Delivery Start'].fillna(value=pd.datetime(2019,1,1,9,0).time())
 			df['Delivery End'] = df['Delivery End'].fillna(value=pd.datetime(2019,1,1,17,0).time())
-			df[['Keg &#8209; 13.2 gal', 'Keg &#8209; Sixtel']] = df[['Keg &#8209; 13.2 gal', 'Keg &#8209; Sixtel']].fillna(value=0)
+			# df[['Keg &#8209; 13.2 gal', 'Keg &#8209; Sixtel']] = df[['Keg &#8209; 13.2 gal', 'Keg &#8209; Sixtel']].fillna(value=0)
 			df['Note'] = df['Note'].fillna(value='')
 
 

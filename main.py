@@ -35,7 +35,7 @@ config = yaml.safe_load(stream)
 # Ekos
 eUsername = config['ekos_user']
 ePassword = config['ekos_pw']
-PATH = config['PATH']	
+PATH = config['PATH']
 tue = 'Distribution - Tuesday'
 wed = 'Distribution - Wednesday'
 thu = 'Distribution - Thursday'
