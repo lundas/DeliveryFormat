@@ -1,3 +1,4 @@
+#! /usr/bin/env/ python
 from datetime import datetime, date
 from pytz import timezone
 import os

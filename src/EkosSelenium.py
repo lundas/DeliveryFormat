@@ -1,3 +1,4 @@
+#! /usr/bin/env/ python
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.firefox.options import Options
@@ -14,6 +15,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from datetime import datetime
 import time
 import logging
+import yaml
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -31,8 +33,13 @@ logger.addHandler(fh)
 class EkosSelenium:
 	'''Class for accessing and downloading items from Ekos using 
 	Selenium Webdriver'''
+	# Config
+	conf_file ='./DeliveryFormat/config_EXAMPLE.yaml' #PATH to config file
+	stream = file(conf_file, 'r')
+	config = yaml.safe_load(stream)
+
 	# Firefox Settings. Need to import from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
-	gPATH = '/PATH/TO/DRIVER'
+	gPATH = config['gPATH']
 
 	# FIREFOX PROFILE - PREVENTS DOWNLOAD DIALOGS
 	profile = FirefoxProfile()
