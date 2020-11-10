@@ -158,7 +158,7 @@ class EkosSelenium:
 				alert.accept()
 				logger.warning('Unexpected Alert Accepted')
 			else:
-				logger.warning('UNKNOWN ERROR: Unable to complete download')
+				# logger.warning('UNKNOWN ERROR: Unable to complete download')
 				break
 
 		return dltime
