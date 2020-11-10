@@ -53,7 +53,7 @@ class EkosSelenium:
 	options.add_argument('-headless')
 
 	browser = webdriver.Firefox(firefox_profile = profile, 
-	#	                        executable_path = gPATH,
+		                        executable_path = gPATH,	# Need executable_path for cron
 		                        firefox_options = options)
 
 	# chrome_options = Options()
@@ -158,6 +158,7 @@ class EkosSelenium:
 				alert.accept()
 				logger.warning('Unexpected Alert Accepted')
 			else:
+				logger.warning('UNKNOWN ERROR: Unable to complete download')
 				break
 
 		return dltime
