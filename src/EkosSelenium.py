@@ -44,7 +44,7 @@ class EkosSelenium:
 	# FIREFOX PROFILE - PREVENTS DOWNLOAD DIALOGS
 	profile = FirefoxProfile()
 	profile.set_preference("browser.download.folderList", 2)  #set download location as custom dir
-	profile.set_preference("browser.download.dir", '/PATH/TO/LOCATION/')  #sets custom dir - NEED PATH ON LOCAL MACHINE
+	profile.set_preference("browser.download.dir", config['PATH'])  #sets custom dir - NEED PATH ON LOCAL MACHINE
 	profile.set_preference("browser.helperApps.neverAsk.openFile","text/csv,application/vnd.ms-excel")
 	profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "text/csv,application/vnd.ms-excel")
 
