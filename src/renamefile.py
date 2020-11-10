@@ -57,7 +57,7 @@ class RenameFile:
 				logger.info('File found!')
 				filename = filename_regex.match(l).string
 				os.rename(PATH + filename, PATH + new_filename)
-			elif filename_regex.match(l) == None and count == filename_regex.match(l):
+			elif filename_regex.match(l) == None and count == len(filename_regex.match(l)):
 				logger.info('File not found.')
 			else:
 				logger.info('File does not match regex. Checking next file.')
